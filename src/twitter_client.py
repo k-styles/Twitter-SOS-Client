@@ -44,7 +44,7 @@ class TwitterStreamingClient:
 
     # Provide rules and Bearer Token to add rules to the Twitter API
     def add_rules(self, rules):
-        payload = {"add": rules}
+        payload = {"add": [rules]}
         response = requests.post(
             "https://api.twitter.com/2/tweets/search/stream/rules",
             headers={'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format(self.set_token)},
