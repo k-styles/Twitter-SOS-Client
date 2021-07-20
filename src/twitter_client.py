@@ -13,8 +13,6 @@ import os
 import json
 
 from requests.models import StreamConsumedError
-from .config import BEARER_TOKEN
-from .config import API_SECRET_KEY
 
 
 #---------Some Useful Functions---------#
@@ -40,7 +38,7 @@ def Tweets_to_JSON(streamed_tweets_filename, tweet):
 
 class TwitterStreamingClient:
 
-    def __init__(self):
+    def __init__(self, BEARER_TOKEN, API_SECRET_KEY):
         self.set_token = BEARER_TOKEN
         self.api_secret_key = API_SECRET_KEY
 
