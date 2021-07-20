@@ -2,6 +2,8 @@
 
 import argparse
 
+from src.app  import parse_arguments
+
 version = "0.10."
 
 parser = argparse.ArgumentParser()
@@ -16,3 +18,5 @@ parser.add_argument("--getrules",
 					action="store_true")
 
 ARGV = parser.parse_args()
+
+parse_arguments(ARGV)
