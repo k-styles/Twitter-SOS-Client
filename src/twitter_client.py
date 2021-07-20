@@ -11,6 +11,7 @@ Functionalities provided are:
 import requests
 import os
 import json
+import warnings
 
 from requests.models import StreamConsumedError
 
@@ -54,6 +55,18 @@ class TwitterStreamingClient:
             raise Exception(
                 "Cannot add rules (HTTP {}): {}".format(response.status_code, response.text)
             )
+        response_json = json.loads(response.text)
+
+        # Check for duplicate rule error. Otherwise pass.
+        try:
+            if response_json['errors'][0]['title'] == 'DuplicateRule':
+                warnings.warn("This rule has already been set up")
+            else:
+                pass
+        except:
+            print("Added Rules: ", payload)
+
+        
         return json.dumps(response.json())
 
     # Provide Bearer Token to Retrieve Rules from the Twitter API
