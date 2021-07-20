@@ -1,10 +1,9 @@
 """ Argument parser for command line arguments.
 """
-from .twitter_client import TwitterStreamingClient
-from .config import BEARER_TOKEN
-from .config import API_SECRET_KEY
+from twitter_client import TwitterStreamingClient
+from config import credentials_dict
 
-streamingClient = TwitterStreamingClient(BEARER_TOKEN, API_SECRET_KEY)
+streamingClient = TwitterStreamingClient(credentials_dict['BEARER_TOKEN'], credentials_dict['API_SECRET_KEY'])
 
 def parse_arguments(args):
 	if(args.start):
