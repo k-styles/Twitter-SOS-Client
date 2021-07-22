@@ -1,7 +1,9 @@
 import os
 import json
+from pathlib import Path
 
-file_path = ''
+file_path = str(Path(os.getcwd()).joinpath('src').joinpath('credentials.json'))
+
 file_template = {
     "BEARER_TOKEN": None,
     "API_KEY": None,
@@ -14,7 +16,8 @@ try:
     with open(file_path, 'r') as file:
         creds_json = json.load(file)
         for key in creds_json.keys():
-            os.environ[key] = creds_json[key]
+            if(creds_json[key]):
+                os.environ[key] = creds_json[key]
 
 except FileNotFoundError as fnf:
     with open(file_path, 'w') as file:
