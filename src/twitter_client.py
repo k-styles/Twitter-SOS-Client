@@ -66,7 +66,7 @@ class TwitterStreamingClient:
         except:
             print("Added Rules: ", payload)
 
-        
+
         return json.dumps(response.json())
 
     # Provide Bearer Token to Retrieve Rules from the Twitter API
@@ -145,6 +145,7 @@ class TwitterStreamingClient:
 
     # Opens up a stream of tweets by providing Bearer token
     def stream_tweets(self, store_to_json=False, streamed_tweets_filename=None):
+        from .mongo import insert_tweet
         response = requests.get(
             "https://api.twitter.com/2/tweets/search/stream",
             headers={'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format(self.set_token)},
@@ -153,8 +154,6 @@ class TwitterStreamingClient:
                     "expansions":"referenced_tweets.id"
             }
         )
-
-        print("$$$$$", response, "$$$$$")
 
         if response.status_code != 200:
             raise Exception(
@@ -171,7 +170,8 @@ class TwitterStreamingClient:
                     Tweets_to_JSON(streamed_tweets_filename, json_obj)
 
                 json_response_python_dict = json.loads(response_line)
-                return json.dumps(json_response_python_dict, indent=4, sort_keys=True)
+                # return json.dumps(json_response_python_dict, indent=4, sort_keys=True)
+                insert_tweet(json_response_python_dict)
 
 if __name__ == '__main__':
     #### SET YOUR RULES OVER HERE ####
