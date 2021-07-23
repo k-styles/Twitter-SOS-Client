@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 
 import argparse
-import json
 
 import src
 from src.app  import parse_arguments
 
-version = "0.10."
+version = "0.1.0"
 
 parser = argparse.ArgumentParser()
 
@@ -23,7 +22,6 @@ parser.add_argument("-gr",
 
 
 ARGV = parser.parse_args()
-# print(ARGV)
 parse_arguments(ARGV)
 
 # Define credentials dictionary
