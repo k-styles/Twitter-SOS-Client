@@ -1,5 +1,5 @@
-""" Argument parser for command line arguments.
-"""
+""" Argument parser for command line arguments."""
+
 from .twitter_client import TwitterStreamingClient
 from .config import BEARER_TOKEN, API_SECRET_KEY
 
