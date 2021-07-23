@@ -7,9 +7,7 @@ streamingClient = TwitterStreamingClient(BEARER_TOKEN, API_SECRET_KEY)
 
 def parse_arguments(args):
 	if(args.start):
-		# TODO: Implement starting the app
-		pass
+		streamingClient.stream_tweets()
 	if(args.getrules):
-		# TODO: Implement starting the app
 		rules = streamingClient.get_rules()
 		print(rules)
