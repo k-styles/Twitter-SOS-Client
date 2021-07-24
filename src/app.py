@@ -11,3 +11,6 @@ def parse_arguments(args):
 	if(args.getrules):
 		rules = streamingClient.get_rules()
 		print(rules)
+	if(args.del_all_rules):
+		response = streamingClient.delete_all_rules()
+		print(response)
