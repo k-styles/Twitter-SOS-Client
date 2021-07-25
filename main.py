@@ -21,6 +21,5 @@ parser.add_argument("-da",
 		    			"--del_all_rules",
 		    			help="Delete all the rules",
 		    			action="store_true")
-
 ARGV = parser.parse_args()
 parse_arguments(ARGV)
