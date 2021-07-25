@@ -117,12 +117,13 @@ class TwitterStreamingClient:
             )
         return json.dumps(response.json())
 
-    # Provide Bearer Token to delete all the rules set up earlier
+    # Provide Secret API Key to delete all the rules set up earlier
     def delete_all_rules(self):
+        
         confirm = input("Please Confirm that you really want to DELETE all the Rules that you have set up earlier. Enter your API Secret Key: ")
         if confirm==self.api_secret_key:
             # First get all the rules
-            rules = self.get_rules(self.set_token)
+            rules = self.get_rules()
 
             # Now delete all the rules using ids (or values)
             if rules is None or "data" not in rules:
@@ -136,6 +137,10 @@ class TwitterStreamingClient:
                 json=payload
             )
             if response.status_code != 200:
+                if response.status_code == 403:
+                    print("client-not-enrolled/Unauthorized")
+                if response.status_code == 400:
+                    print("One or more parameters to your request was invalid.")
                 raise Exception(
                     "Cannot delete rules (HTTP {}): {}".format(
                         response.status_code, response.text
