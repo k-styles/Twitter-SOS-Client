@@ -136,17 +136,34 @@ class TwitterStreamingClient:
                 headers={'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format(self.set_token)},
                 json=payload
             )
+            # Check for errors, Otherwise pass.
+            if response.status_code == 400:
+                warnings.warn("One or more parameters to your request was invalid.")
+            elif response.status_code == 401:
+                warnings.warn("Unauthorized Request")
+            elif response.status_code == 403:
+                warnings.warn("The Client is not enrolled/unauthorized.")
+            elif response.status_code == 404:
+                warnings.warn("The URI requested is invalid or the resource requested, such as a user, does not exist.")
+            elif response.status_code == 410:
+                warnings.warn("This resource is gone. Used to indicate that an API endpoint has been turned off.")
+            elif response.status_code == 429:
+                warnings.warn("Returned when a request cannot be served due to the app's rate limit having been exhausted for the resource.")
+            elif response.status_code == 502:
+                warnings.warn("Twitter is down, or being upgraded.")
+            elif response.status_code == 503:
+                warnings.warn("The Twitter servers are up, but overloaded with requests. Try again later.")
+            else:
+                pass
+            response_json = json.loads(response.text)
+            print(response_json)
             if response.status_code != 200:
-                if response.status_code == 403:
-                    print("client-not-enrolled/Unauthorized")
-                if response.status_code == 400:
-                    print("One or more parameters to your request was invalid.")
                 raise Exception(
                     "Cannot delete rules (HTTP {}): {}".format(
                         response.status_code, response.text
                     )
                 )
-            return json.dumps(response.json())
+            
 
     # Opens up a stream of tweets by providing Bearer token
     def stream_tweets(self, store_to_json=False, streamed_tweets_filename=None):
