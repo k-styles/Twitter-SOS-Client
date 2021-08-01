@@ -13,3 +13,5 @@ def parse_arguments(args):
 		print(rules)
 	if(args.del_all_rules):
 		streamingClient.delete_all_rules()
+	if(args.stream_all_tweets):
+		streamingClient.stream_tweets()

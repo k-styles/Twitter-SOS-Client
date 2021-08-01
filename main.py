@@ -21,5 +21,9 @@ parser.add_argument("-da",
 		    			"--del_all_rules",
 		    			help="Delete all the rules",
 		    			action="store_true")
+parser.add_argument("-st",               
+		    			"--stream_all_tweets",
+		    			help="Stream all the tweets",
+		    			action="store_true")
 ARGV = parser.parse_args()
 parse_arguments(ARGV)
