@@ -91,12 +91,51 @@ class TwitterStreamingClient:
             headers={'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format(self.set_token)},
             json=payload
         )
+        #checking for errors and warnings
+        if response.status_code == 400:
+             warnings.warn("Authentication required or invalid ID")
+        elif response.status_code == 401:
+            warnings.warn("Unauthorized request")
+        elif response.status_code == 403:
+            warnings.warn("Unauthorized Client or user not found")
+        elif response.status_code == 404:
+            warnings.warn("The URI requested is invalid")
+        elif response.status_code == 406:
+            warnings.warn("Invalid format specified")
+        elif response.status_code == 410:
+            warnings.warn("API endpoint has been turned off")
+        elif response.status_code == 420:
+            warnings.warn("Rate limited for making too many requests")
+        elif response.status_code == 422:
+            warnings.warn("Unable to process data")
+        elif response.status_code == 429:
+            warnings.warn("Tweet rate limit exceeded due to too many requests")
+        elif response.status_code == 500:
+            warnings.warn("Something is broken. Try again later")
+        elif response.status_code == 502:
+            warnings.warn("Twitter is down, or being upgraded.")
+        elif response.status_code == 503:
+            warnings.warn("The Twitter servers are up, but overloaded with requests. Try again later.")
+        elif response.status_code == 504:
+            warnings.warn("The Twitter servers are up, but the request couldn’t be serviced due to some failure within the internal stack. Try again later.")
+        else:
+            pass
+
         if response.status_code != 200:
             raise Exception(
                 "Cannot delete rules (HTTP {}): {}".format(
                     response.status_code, response.text
                 )
             )
+        #Check for valid value. Otherwise pass
+        response_json = json.loads(response.text)
+        try:
+            if response_json['errors'][0]['title'] == "Invalid Request":
+                warnings.warn("One or more parameters to your request was invalid.")
+            else:
+                pass
+        except:
+            print("Deleted Rules: ", payload)
         return json.dumps(response.json())
 
     # Deletes rules according to the IDs provided as a list
@@ -109,12 +148,53 @@ class TwitterStreamingClient:
             headers={'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format(self.set_token)},
             json=payload
         )
+
+        #checking for errors and warnings
+        if response.status_code == 400:
+            warnings.warn("Authentication required or invalid ID")
+        elif response.status_code == 401:
+            warnings.warn("Unauthorized request")
+        elif response.status_code == 403:  #exception
+            warnings.warn("Unauthorized Client or user not found")
+        elif response.status_code == 404:  #exception
+            warnings.warn("The URI requested is invalid")
+        elif response.status_code == 406:  #exception
+            warnings.warn("Invalid format specified")
+        elif response.status_code == 410:  #exception
+            warnings.warn("API endpoint has been turned off")
+        elif response.status_code == 420:
+            warnings.warn("Rate limited for making too many requests")
+        elif response.status_code == 422:  #exception
+            warnings.warn("Unable to process data")
+        elif response.status_code == 429:  #exception
+            warnings.warn("Tweet rate limit exceeded due to too many requests")
+        elif response.status_code == 500:
+            warnings.warn("Something is broken. Try again later")
+        elif response.status_code == 502:
+            warnings.warn("Twitter is down, or being upgraded.")
+        elif response.status_code == 503:
+            warnings.warn("The Twitter servers are up, but overloaded with requests. Try again later.")
+        elif response.status_code == 504:
+            warnings.warn("The Twitter servers are up, but the request couldn’t be serviced due to some failure within the internal stack. Try again later.")
+        else:
+            pass
+        
+
         if response.status_code != 200:
             raise Exception(
                 "Cannot delete rules (HTTP {}): {}".format(
                     response.status_code, response.text
                 )
             )
+        #Check for valid id. Otherwise pass
+        response_json = json.loads(response.text)
+        try:
+            if response_json['errors'][0]['title'] == "Invalid Request":
+                warnings.warn("One or more parameters to your request was invalid.")
+            else:
+                pass
+        except:
+            print("Deleted Rules: ", payload)
         return json.dumps(response.json())
 
     # Provide Secret API Key to delete all the rules set up earlier
