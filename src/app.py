@@ -17,9 +17,6 @@ def parse_arguments(args):
 	if(args.del_all_rules):
 		streamingClient.delete_all_rules()
 
-	if(args.stream_all_tweets):
-		streamingClient.stream_tweets()
-
 	if (args.del_id):
 		ids_list = list(args.del_id.split(" "))
 		streamingClient.delete_rules_by_ids(ids_list)
