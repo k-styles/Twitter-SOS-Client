@@ -247,7 +247,7 @@ class TwitterStreamingClient:
 
     # Opens up a stream of tweets by providing Bearer token
     def stream_tweets(self, store_to_json=False, streamed_tweets_filename=None):
-        from .mongo import insert_tweet
+        from .redis.redis_client import insert_tweet
         response = requests.get(
             "https://api.twitter.com/2/tweets/search/stream",
             headers={'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format(self.set_token)},
@@ -275,8 +275,9 @@ class TwitterStreamingClient:
                 warnings.warn("The Twitter servers are up, but overloaded with requests. Try again later.")
         else:
             pass
-        response_json = json.loads(response.text)
-        print(response_json)
+        
+        #response_json = json.loads(response.text)
+        #print(response_json)
 
         if response.status_code != 200:
             raise Exception(
@@ -284,7 +285,6 @@ class TwitterStreamingClient:
                     response.status_code, response.text
                 )
             )
-
         for response_line in response.iter_lines():
             if response_line:
                 if store_to_json:
@@ -294,7 +294,9 @@ class TwitterStreamingClient:
 
                 json_response_python_dict = json.loads(response_line)
                 # return json.dumps(json_response_python_dict, indent=4, sort_keys=True)
+                print(json_response_python_dict)
                 insert_tweet(json_response_python_dict)
+
 
 if __name__ == '__main__':
     #### SET YOUR RULES OVER HERE ####

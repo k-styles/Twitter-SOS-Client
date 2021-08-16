@@ -1,0 +1,3 @@
+HOSTNAME = ''
+PORT = None
+PASSWORD = ''
