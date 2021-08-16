@@ -1,3 +1,3 @@
-HOSTNAME = ''
-PORT = None
+HOSTNAME = 'localhost'
+PORT = 6379
 PASSWORD = ''

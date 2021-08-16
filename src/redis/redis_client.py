@@ -4,9 +4,9 @@ import json
 
 # Connect to the Server
 r = redis.Redis(
-    host = redis_login.HOSTNAME,
-    port = redis_login.PORT,
-    password = redis_login.PASSWORD
+    host = 'localhost',
+    port = 6379
+    #password = redis_login.PASSWORD
 )
 
 def parse_arguments(args):
@@ -43,4 +43,4 @@ def insert_tweet(tweet):
     try:
         r.execute_command('JSON.SET', 'object', '.', json.dumps(tweets_json))
     except Exception as error:
-        print("Error inserting tweet in cache")
+        print("Error inserting tweet in cache.. ", error)
