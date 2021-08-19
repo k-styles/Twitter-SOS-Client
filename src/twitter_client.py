@@ -13,8 +13,6 @@ import os
 import json
 import warnings
 
-from requests.models import StreamConsumedError
-
 
 #---------Some Useful Functions---------#
 # Extract and returns a list of valuesof the rules that already been set up
@@ -67,7 +65,7 @@ class TwitterStreamingClient:
             print("Added Rules: ", payload)
 
 
-        return json.dumps(response.json())
+        return response.json()
 
     # Provide Bearer Token to Retrieve Rules from the Twitter API
     def get_rules(self):
@@ -136,7 +134,7 @@ class TwitterStreamingClient:
                 pass
         except:
             print("Deleted Rules: ", payload)
-        return json.dumps(response.json())
+        return response.json()
 
     # Deletes rules according to the IDs provided as a list
     def delete_rules_by_ids(self, ids):
@@ -195,7 +193,7 @@ class TwitterStreamingClient:
                 pass
         except:
             print("Deleted Rules: ", payload)
-        return json.dumps(response.json())
+        return response.json()
 
     # Provide Secret API Key to delete all the rules set up earlier
     def delete_all_rules(self):
@@ -236,14 +234,13 @@ class TwitterStreamingClient:
             else:
                 pass
             response_json = json.loads(response.text)
-            print(response_json)
             if response.status_code != 200:
                 raise Exception(
                     "Cannot delete rules (HTTP {}): {}".format(
                         response.status_code, response.text
                     )
                 )
-            
+            return response.json() 
 
     # Opens up a stream of tweets by providing Bearer token
     def stream_tweets(self, store_to_json=False, streamed_tweets_filename=None):
@@ -275,10 +272,6 @@ class TwitterStreamingClient:
                 warnings.warn("The Twitter servers are up, but overloaded with requests. Try again later.")
         else:
             pass
-        
-        #response_json = json.loads(response.text)
-        #print(response_json)
-
         if response.status_code != 200:
             raise Exception(
                 "Cannot get stream (HTTP {}): {}".format(
@@ -294,44 +287,3 @@ class TwitterStreamingClient:
 
                 json_response_python_dict = json.loads(response_line)
                 add_tweet_to_cache(json_response_python_dict)
-
-
-if __name__ == '__main__':
-    #### SET YOUR RULES OVER HERE ####
-    #rules_to_be_added = None
-
-    # Add/set Rules
-    #add_rules(BEARER_TOKEN, rules_to_be_added)
-
-    # Retrieve Rules
-    #rules = get_rules(BEARER_TOKEN)
-
-    ## Delete Rules by IDs
-    #ids = extract_ids(rules)    # Provides IDs of all rules
-    #delete_rules_by_ids(BEARER_TOKEN, ids)
-
-
-    ## Delete Rules by Values
-    #values = extract_values(rules)  # Provides Values of all rules
-    #delete_rules_by_values(BEARER_TOKEN, values)
-
-
-    # Deletes all the rules that have been set up
-    #delete_all_rules(BEARER_TOKEN)
-
-
-    # Stream Tweets (try-except blocks completes the json file by adding ] at the end)
-    store_to_json = True
-    # Before setting store_to_json=True, Please Make sure your JSON file does not exist or is empty!
-    if store_to_json:
-        streamed_tweets_filename = 'streamed_tweets.json'
-        try:
-            # stream_tweets(BEARER_TOKEN, store_to_json=store_to_json, streamed_tweets_filename=streamed_tweets_filename)
-            pass
-        except KeyboardInterrupt:
-            with open(streamed_tweets_filename, 'a') as tf:
-                tf.write(']')
-
-    else:
-        streamed_tweets_filename = None
-        # stream_tweets(BEARER_TOKEN, store_to_json=store_to_json, streamed_tweets_filename=streamed_tweets_filename)
