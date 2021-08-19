@@ -247,7 +247,7 @@ class TwitterStreamingClient:
 
     # Opens up a stream of tweets by providing Bearer token
     def stream_tweets(self, store_to_json=False, streamed_tweets_filename=None):
-        from .redis.redis_client import insert_tweet
+        from .db import add_tweet_to_cache
         response = requests.get(
             "https://api.twitter.com/2/tweets/search/stream",
             headers={'Content-Type':'application/json', 'Authorization': 'Bearer {}'.format(self.set_token)},
@@ -293,9 +293,7 @@ class TwitterStreamingClient:
                     Tweets_to_JSON(streamed_tweets_filename, json_obj)
 
                 json_response_python_dict = json.loads(response_line)
-                # return json.dumps(json_response_python_dict, indent=4, sort_keys=True)
-                print(json_response_python_dict)
-                insert_tweet(json_response_python_dict)
+                add_tweet_to_cache(json_response_python_dict)
 
 
 if __name__ == '__main__':
