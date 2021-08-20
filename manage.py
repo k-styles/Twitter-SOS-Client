@@ -3,22 +3,18 @@
 import argparse
 
 import src
-from src.app  import parse_arguments
+from src.app import parse_arguments
 
 version = "0.1.0"
 
 parser = argparse.ArgumentParser()
 
 
-parser.add_argument("-st",
-					"--start",
-					help="Start the application",
-					action="store_true")
+parser.add_argument("-st", "--start", help="Start the application", action="store_true")
 
-parser.add_argument("-gr",
-					"--getrules",
-					help="Get the current rules",
-					action="store_true")
+parser.add_argument(
+    "-gr", "--getrules", help="Get the current rules", action="store_true"
+)
 
 
 ARGV = parser.parse_args()
