@@ -41,7 +41,7 @@ def insert_tweet(tweet):
     try:
         tweet_id = tweets.insert_one(tweet).inserted_id
     except Exception as e:
-        logging.exception("Error inserting tweet")
+        mongo_logger.exception("Error inserting tweet:", e)
     else:
         mongo_logger.debug("Added:tweet_id:" + str(tweet_id))
 
@@ -51,14 +51,18 @@ def insert_bulk_tweets(tweets_list):
     try:
         tweet_id = tweets.insert_many(tweets_list).inserted_ids
     except Exception as e:
-        mongo_logger.exception("Error inserting tweets list:" + e)
+        mongo_logger.exception("Error inserting tweets list:", e)
     else:
         mongo_logger.debug("Added:tweet_id:" + str(tweet_id))
 
 
 def add_tweet_to_cache(tweet):
-    r.lpush("tweets", json.dumps(tweet))
-    redis_logger.debug("Added:tweet_id:" + str(tweet["data"]["id"]))
+    try:
+        r.lpush("tweets", json.dumps(tweet))
+    except Exception as e:
+        redis_logger.exception("Error adding tweet to cache:", e)
+    else:
+        redis_logger.debug("Added:tweet_id:" + str(tweet["data"]["id"]))
 
 
 def fetch_tweets_and_clear_cache():
@@ -67,7 +71,7 @@ def fetch_tweets_and_clear_cache():
         while r.llen("tweets") != 0:
             tweets.append(json.loads(r.lpop("tweets").decode("utf-8")))
     except Exception as e:
-        redis_logger.exception()
+        redis_logger.exception("Error popping tweets from caches:", e)
     else:
         return tweets
 
