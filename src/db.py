@@ -30,8 +30,11 @@ client = MongoClient(MONGO_URI)
 mongo_logger.info("Starting Atlas client")
 
 # Connect to the Server
-r = redis.Redis()
-redis_logger.info("Connecting to redis server")
+try:
+    redis_logger.info("Connecting to redis server")
+    r = redis.Redis()
+except Exception as e:
+    redis_logger.exception(e)
 
 db = client.twitter_test_db
 tweets = db.tweets
